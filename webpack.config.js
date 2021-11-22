@@ -2,30 +2,26 @@ const path = require("path");
 
 module.exports = {
   mode: "production",
-  entry: "./src/datatable-builder.js",
+  entry: "./src/index.js",
   output: {
     path: path.resolve("build"),
-    filename: "datatable-builder.js",
+    filename: "index.js",
     libraryTarget: "commonjs2",
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
+        resolve: {
+          extensions: ['.js', '.jsx'],
+        },
         exclude: /(node_modules)/,
-        use: "babel-loader",
+        loader: 'babel-loader',
+        options: { presets: ['@babel/preset-env', '@babel/preset-react'] },
       },
       {
         test: /\.css$/,
         use: ["style-loader", "css-loader"],
-      },
-      {
-        test: /\.jsx$/,
-        exclude: /(node_modules)/,
-        loader: "babel-loader",
-        options: {
-          presets: ["@babel/preset-react"],
-        },
       },
       {
         test: /\.svg$/,
@@ -39,6 +35,7 @@ module.exports = {
        }
     ],
   },
+  
   resolve: {
     alias: {
       react: path.resolve(__dirname, "./node_modules/react"),
