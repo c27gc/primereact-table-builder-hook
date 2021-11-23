@@ -29,6 +29,6 @@ test('render mulselect body', () => {
 
   const component = render( <statusBodyTemplateClosure mappingPolicy={mappingPolicy} colorPolicy={colorPolicy} field={field} /> );
 
-  console.log(component)
+  //console.log(component)
 
 })
