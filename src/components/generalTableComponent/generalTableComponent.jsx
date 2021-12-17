@@ -7,6 +7,10 @@ import { Column } from "primereact/column";
 import TableHeader from "./tableHeader";
 import CrudModals from "../columnCrud/crudModals";
 
+import 'primeflex/primeflex.css';
+import 'primeicons/primeicons.css';
+
+
 
 const GeneralTableComponent = ({
   isDownloadable,
@@ -26,7 +30,8 @@ const GeneralTableComponent = ({
   rowClickActionCallback,
   hasRowReorder,
   onRowReorderCallback,
-  numberOfRecords
+  numberOfRecords,
+  documentImage
 }) => {
   /* ================= base states ================= */
 
@@ -228,6 +233,9 @@ const GeneralTableComponent = ({
           totalRecords={page}
           loading={loading}
           editMode={"cell"}
+          scrollable
+          scrollDirection="both"
+          exportFilename={title}
           header={
             <TableHeader
               title={title}
@@ -249,6 +257,7 @@ const GeneralTableComponent = ({
               setCurrentForm={setCurrentForm}
               isPaginated={isLazy}
               headerFormComponent={headerFormComponent}
+              documentImage={documentImage}
             />
           }
           selection={selectedItem}

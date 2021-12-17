@@ -30,6 +30,7 @@ const CrudModals = ({
   newCBinput,
   setRender
 }) => {
+
   const saveInput = async () => {
     setSubmitted(true);
 
@@ -121,7 +122,7 @@ const CrudModals = ({
         onClick={hideDeleteInputDialog}
       />
       <Button
-        label="Yes"
+        label="Si"
         icon="pi pi-check"
         className="p-button-text"
         onClick={deleteInput}
@@ -132,13 +133,13 @@ const CrudModals = ({
   const inputDialogFooter = (
     <React.Fragment>
       <Button
-        label="Cancel"
+        label="Cancelar"
         icon="pi pi-times"
         className="p-button-text"
         onClick={hideDialog}
       />
       <Button
-        label="Save"
+        label="Guardar"
         icon="pi pi-check"
         className="p-button-text"
         onClick={saveInput}
@@ -153,7 +154,7 @@ const CrudModals = ({
         style={{
           width: "450px",
         }}
-        header="Editar"
+        header="Ingrese datos"
         modal
         className="p-fluid"
         footer={inputDialogFooter}
@@ -163,15 +164,14 @@ const CrudModals = ({
         }}
       >
         {Object.keys(dataSchema).map((element, index) => {
-          if (!dataInfo[element]?.editVisibility) {
+          if (!dataInfo[element]?.editVisibility && currentForm === "edit") {
             return null;
           }
           return (
             <div className="p-field">
               {(() => {
                 if (
-                  dataInfo[element].type === "date" &&
-                  dataInfo[element].editVisibility
+                  dataInfo[element].type === "date" 
                 ) {
                   return (
                     <div>
@@ -199,15 +199,15 @@ const CrudModals = ({
                             };
                           });
                         }}
-                        placeholder="Date"
+                        disabled={(dataInfo[element].editDisable && currentForm === "edit") || (dataInfo[element].newDisable && currentForm === "new") }
+                        placeholder="Fecha"
                         dateFormat="yy-mm-dd"
                         className="p-column-filter"
                       />
                     </div>
                   );
                 } else if (
-                  dataInfo[element].type === "string" &&
-                  dataInfo[element].editVisibility
+                  dataInfo[element].type === "string" 
                 ) {
                   return (
                     <div>
@@ -218,8 +218,7 @@ const CrudModals = ({
                         value={input[element]}
                         onChange={(e) => onInputChange(e, element)}
                         required
-                        autoFocus
-                        disabled={dataInfo[element].editDisable}
+                        disabled={(dataInfo[element].editDisable && currentForm === "edit") || (dataInfo[element].newDisable && currentForm === "new") }
                         className={classNames({
                           "p-invalid": submitted && !input[element],
                         })}
@@ -227,8 +226,7 @@ const CrudModals = ({
                     </div>
                   );
                 } else if (
-                  dataInfo[element].type === "number" &&
-                  dataInfo[element].editVisibility
+                  dataInfo[element].type === "number" 
                 ) {
                   return (
                     <div>
@@ -239,8 +237,7 @@ const CrudModals = ({
                         value={input[element]}
                         onChange={(e) => onInputChange(e, element)}
                         required
-                        autoFocus
-                        disabled={dataInfo[element].editDisable}
+                        disabled={(dataInfo[element].editDisable && currentForm === "edit") || (dataInfo[element].newDisable && currentForm === "new")}
                         className={classNames({
                           "p-invalid": submitted && !input[element],
                         })}
@@ -248,8 +245,7 @@ const CrudModals = ({
                     </div>
                   );
                 } else if (
-                  dataInfo[element].type.includes("multiselect-") &&
-                  dataInfo[element].editVisibility
+                  dataInfo[element].type.includes("multiselect-") 
                 ) {
                   return (
                     <div>
@@ -272,7 +268,8 @@ const CrudModals = ({
                           dataInfo[element].colorPolicy
                         )}
                         showClear
-                        placeholder="Select a Status"
+                        disabled={(dataInfo[element].editDisable && currentForm === "edit") || (dataInfo[element].newDisable && currentForm === "new") }
+                        placeholder="Seleccione una opción"
                         className="p-column-filter"
                       />
                     </div>
@@ -281,7 +278,7 @@ const CrudModals = ({
               })()}
               {submitted && !input[element] && dataInfo[element]["required"] ? (
                 <small className="p-error">
-                  {dataInfo[element].title} is required.
+                  {dataInfo[element].title} es requerido.
                 </small>
               ) : null}
             </div>
@@ -293,7 +290,7 @@ const CrudModals = ({
         style={{
           width: "450px",
         }}
-        header="Confirm"
+        header="Confirmar"
         modal
         footer={deleteInputDialogFooter}
         onHide={hideDeleteInputDialog}
@@ -307,7 +304,7 @@ const CrudModals = ({
           />
           {input && (
             <span>
-              Are you sure you want to delete <b>{input.name}</b>?
+              Estas seguro que quieres borrar <b>{input.name}</b>?
             </span>
           )}
         </div>

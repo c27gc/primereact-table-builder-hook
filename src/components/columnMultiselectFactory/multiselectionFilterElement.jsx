@@ -33,7 +33,7 @@ const RenderStatusFilter = (mappingPolicy, colorPolicy, dt, field) => {
 
   return (
       <Dropdown value={selectedStatus} options={Object.keys(colorPolicy)} onChange={onStatusFilterChange}
-                  itemTemplate={statusItemTemplate} showClear placeholder="Select a Status" className="p-column-filter"/>
+                  itemTemplate={statusItemTemplate} showClear placeholder="Selecciona una opcion" className="p-column-filter"/>
   );
 
 }

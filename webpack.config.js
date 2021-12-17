@@ -2,11 +2,15 @@ const path = require("path");
 
 module.exports = {
   mode: "production",
+  target: "web",
   entry: "./src/index.js",
   output: {
-    path: path.resolve("build"),
+    path: path.resolve("dist"),
     filename: "index.js",
     libraryTarget: "commonjs2",
+  },
+  optimization: {
+    minimize: false
   },
   module: {
     rules: [
@@ -39,7 +43,7 @@ module.exports = {
   resolve: {
     alias: {
       react: path.resolve(__dirname, "./node_modules/react"),
-      "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
+      "react-dom": path.resolve(__dirname, "./node_modules/react-dom")
     },
   },
   externals: {
@@ -56,5 +60,5 @@ module.exports = {
       amd: "ReactDOM",
       root: "ReactDOM",
     },
-  },
+  }
 };

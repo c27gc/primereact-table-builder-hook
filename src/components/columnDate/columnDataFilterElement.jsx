@@ -17,7 +17,7 @@ const FilterElement = (columnName, dataTableRef) => {
         dataTableRef.current.filter(date, columnName, "custom");
         setSelectedDate(e.value);
       }}
-      placeholder="Registration Date"
+      placeholder="Fecha"
       className="p-column-filter"
     />
   );

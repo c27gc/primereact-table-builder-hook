@@ -90,6 +90,11 @@ class TableBuilder {
     return this
   }
 
+  addDocumentImage(documentImage) {
+    this.documentImage = documentImage;
+    return this;
+  }
+
   build() {
     const TableResult = () => {
       return (
@@ -115,6 +120,7 @@ class TableBuilder {
           hasRowReorder={this.hasRowReorder}
           onRowReorderCallback={this.onRowReorder}
           numberOfRecords={this.numberOfRecords}
+          documentImage={this.documentImage}
         />
       );
     };

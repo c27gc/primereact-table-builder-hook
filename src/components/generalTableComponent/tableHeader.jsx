@@ -1,4 +1,5 @@
 import React from "react";
+import pdfCreator from './PDFgenerator'
 import { Button } from "primereact/button";
 
 import "primeicons/primeicons.css";
@@ -25,9 +26,17 @@ const TableHeader = ({
   setParams,
   setCurrentForm,
   isPaginated,
-  headerFormComponent
+  headerFormComponent,
+  documentImage
 }) => {
+
+  const dataTitles = dataInfo.reduce( (accumulate, current) => {
+    accumulate[current.field] = current.header
+    return accumulate
+  }, {})
+
   const exportCSV = (selectionOnly) => {
+    
     dt.current.exportCSV({ selectionOnly });
   };
 
@@ -51,11 +60,24 @@ const TableHeader = ({
 
   const exportPdf = () => {
     import("jspdf").then((jsPDF) => {
-      import("jspdf-autotable").then(() => {
-        const doc = new jsPDF.default(0, 0);
-        doc.autoTable(exportColumns, data);
-        doc.save("products.pdf");
-      });
+      // import("jspdf-autotable").then(() => {
+      //   const doc = new jsPDF.default(0, 0);
+      //   doc.autoTable(exportColumns, data);
+      //   doc.save(title + ".pdf");
+      // });
+      const renamedData = data.reduce( (accumulate, current) => {
+        const newValue = Object.keys(current).reduce( (acc, curr) => {
+          if(dataTitles[curr]) {
+            acc[dataTitles[curr]] = current[curr]
+          }
+          return acc
+        }, {})
+        return accumulate.concat(newValue)
+      }, [])
+      
+      const doc = new jsPDF.default(0, 0);
+      pdfCreator(doc, renamedData, '', title, documentImage)
+      doc.save(title + ".pdf");
     });
   };
 
@@ -76,13 +98,23 @@ const TableHeader = ({
 
   const exportExcel = () => {
     import("xlsx").then((xlsx) => {
-      const worksheet = xlsx.utils.json_to_sheet(data);
+      const renamedData = data.reduce( (accumulate, current) => {
+        const newValue = Object.keys(current).reduce( (acc, curr) => {
+          if(dataTitles[curr]) {
+            acc[dataTitles[curr]] = current[curr]
+          }
+          return acc
+        }, {})
+        return accumulate.concat(newValue)
+      }, [])
+
+      const worksheet = xlsx.utils.json_to_sheet(renamedData);
       const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
       const excelBuffer = xlsx.write(workbook, {
         bookType: "xlsx",
         type: "array",
       });
-      saveAsExcelFile(excelBuffer, "products");
+      saveAsExcelFile(excelBuffer, title);
     });
   };
 
@@ -94,6 +126,7 @@ const TableHeader = ({
           {isDownloadable ? (
             <div>
               <Button
+                label="CSV"
                 type="button"
                 icon="pi pi-file-o"
                 onClick={() => exportCSV(false)}
@@ -102,20 +135,24 @@ const TableHeader = ({
               />
 
               <Button
+                label="EXCEL"
                 type="button"
                 icon="pi pi-file-excel"
                 onClick={exportExcel}
                 className="p-button-success p-mr-2"
                 data-pr-tooltip="XLS"
               />
+                
 
               <Button
+                label="PDF"
                 type="button"
                 icon="pi pi-file-pdf"
                 onClick={exportPdf}
                 className="p-button-danger p-mr-2"
                 data-pr-tooltip="PDF"
               />
+                
             </div>
           ) : null}
         </div>
